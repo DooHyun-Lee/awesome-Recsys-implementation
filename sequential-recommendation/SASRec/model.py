@@ -96,7 +96,7 @@ class SASRec(nn.Module):
         for i in range(len(self.attention_layers)):
             seqs_feat = torch.transpose(seqs_feat, 0, 1) # [L, N, E]
             Q = self.attention_layernorms[i](seqs_feat)
-            attention_outs, _ = self.attention_layers[i](Q, seqs_feat, seqs_feat, attention_mask)
+            attention_outs, _ = self.attention_layers[i](Q, seqs_feat, seqs_feat, attn_mask=attention_mask)
             seqs_feat = Q + attention_outs
             seqs_feat = torch.transpose(seqs_feat, 0, 1) 
 
@@ -117,3 +117,14 @@ class SASRec(nn.Module):
         pos_logits = (log_feat * pos_emb).sum(dim=-1) # [batch_size, max_len]
         neg_logits = (log_feat * neg_emb).sum(dim=-1)
         return pos_logits, neg_logits
+
+    def predict(self, user_ids, seqs, item_indices):
+        # seqs come with batch_dim
+        log_feat = self.seq2feature(seqs) # [batch_size, max_len, args.hidden_units]
+        final_feat = log_feat[:, -1, :] # [batch_size, args.hidden_units] (batch_size = 1)
+
+        item_embs = self.item_emb(torch.LongTensor(item_indices).to(self.device))
+        # final_feat : [batch_size, args.hidden_units, 1]
+        # after matmul : [batch_size, item_len, 1]
+        logits = item_embs.matmul(final_feat.unsqueeze(-1)).squeeze(-1) # [batch_size, item_len]
+        return logits

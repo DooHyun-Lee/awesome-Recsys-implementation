@@ -16,7 +16,7 @@ from model import *
 path = '/home/doolee13/recsysData/movieLens/ml-1m/ratings.dat'
 parser = argparse.ArgumentParser()
 parser.add_argument('--directory', default= path)
-parser.add_argument('--batch-size', default=128, type=int)
+parser.add_argument('--batch-size', default=64, type=int)
 parser.add_argument('--learning-rate', default=0.001, type=float)
 parser.add_argument('--maxlen', default=200, type=int)
 parser.add_argument('--num-blocks', default=200, type=int)
@@ -76,7 +76,14 @@ if __name__ == '__main__':
             model.eval()
             t1 = time.time() - t0
             T += t1
+            print('Evaluating', end='')            
+            t_test = evaluate(model, dataset, args)
+            t_valid = evaluate_valid(model, dataset, args)
+            print('epoch:%d, time: %f(s), valid (NDCG@10: %.4f, HR@10: %.4f), test (NDCG@10: %.4f, HR@10: %.4f)'
+                    % (epoch, T, t_valid[0], t_valid[1], t_test[0], t_test[1]))
             
-
-
+            t0 = time.time()
             model.train()
+    
+    sampler.close()
+    print('Done!')
