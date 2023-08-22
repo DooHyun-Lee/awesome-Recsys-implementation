@@ -24,6 +24,11 @@ Result with better loss value represents FFN with conv1d <br/>
 
 <br/><br/>
 
+## How to run 
+
+
+<br/><br/>
+
 ## References 
 1. Most of code implementation follows pytorch implementation of SASRec which could be found at  https://github.com/pmixer/SASRec.pytorch/tree/master <br/><br/>
 2. Original paper could be found at https://arxiv.org/pdf/1808.09781.pdf
