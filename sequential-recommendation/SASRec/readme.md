@@ -22,6 +22,8 @@ We used movieLens-1m dataset, pre-processing steps are included in the code <br/
 Below graph shows comparison between feed-forward-network with 2 layer mlp and 2 layer conv1d <br/>
 Result with better loss value represents FFN with conv1d <br/>
 
+![image](https://github.com/DooHyun-Lee/awesome-Recsys-implementation/assets/62175406/03bd45a3-5163-4bdc-be8a-fa911d3a6a75)
+
 <br/><br/>
 
 ## References 
